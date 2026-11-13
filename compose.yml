@@ -1,0 +1,45 @@
+## Compose has 3 layers; Services, Networks, & Volumes.Services are the containers that will be run. Used to describe the Apps you will run.
+## Each service is a container that will be run. You can have multiple services in a single compose file. 
+##Each service can have its own configuration, such as the image to use, the ports to expose, and the environment variables to set.
+## Networks are the connections between the containers. Volumes are the persistent storage for the containers.
+services:
+  # Define the first service
+  postgres:
+    # Use the official PostgreSQL image from Docker Hub
+    image: postgres:16.15
+    container_name: postgres_amd_01
+    restart: unless-stopped
+    # Set the environment variables for the PostgreSQL container
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: jodar86+
+      POSTGRES_DB: mini_amd_project_01
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    networks:
+      - mini_amd_project_01
+
+  # Define the second service
+  pgadmin:
+    # Use the official PostgreSQL image from Docker Hub
+    image: dpage/pgadmin4:9.18
+    container_name: pgadmin_amd_01
+    restart: unless-stopped
+    # Set the environment variables for the pgadmin container
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - mini_amd_project_01
+volumes:
+  postgres_data:
+      
+networks:
+  mini_amd_project_01:
+  
